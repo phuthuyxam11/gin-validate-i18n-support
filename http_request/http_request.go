@@ -1,6 +1,9 @@
 package http_request
 
 import (
+	"bytes"
+	"io/ioutil"
+
 	"github.com/gin-gonic/gin"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 )
@@ -21,6 +24,8 @@ func BodyJsonValidate[T any](bundle *i18n.Bundle) gin.HandlerFunc {
 		if err := c.ShouldBindJSON(&body); err != nil {
 			ValidationRender(c, err, body, bundle)
 		}
+		data, _ := ioutil.ReadAll(c.Request.Body)
+		ioutil.NopCloser(bytes.NewReader(data))
 		c.Next()
 	}
 }
