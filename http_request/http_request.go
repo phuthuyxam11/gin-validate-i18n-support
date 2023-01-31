@@ -29,7 +29,7 @@ func BodyJsonValidate[T any](bundle *i18n.Bundle) gin.HandlerFunc {
 func BodyFormValidate[T any](bundle *i18n.Bundle) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var body T
-		if err := c.ShouldBindBodyWith(&body, binding.Form); err != nil {
+		if err := c.ShouldBindWith(&body, binding.Form); err != nil {
 			ValidationRender(c, err, body, bundle)
 		}
 		c.Next()
