@@ -1,11 +1,8 @@
 package http_request
 
 import (
-	"bytes"
-	"io"
-	"io/ioutil"
-
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 )
 
@@ -21,14 +18,10 @@ func GetParameterValidate[T any](bundle *i18n.Bundle) gin.HandlerFunc {
 
 func BodyJsonValidate[T any](bundle *i18n.Bundle) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		b := bytes.NewBuffer(make([]byte, 0))
-		_ = io.TeeReader(c.Request.Body, b)
-
 		var body T
-		if err := c.ShouldBindJSON(&body); err != nil {
+		if err := c.ShouldBindBodyWith(&body, binding.JSON); err != nil {
 			ValidationRender(c, err, body, bundle)
 		}
-		c.Request.Body = ioutil.NopCloser(b)
 		c.Next()
 	}
 }
