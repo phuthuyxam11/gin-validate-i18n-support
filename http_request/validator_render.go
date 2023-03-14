@@ -92,7 +92,8 @@ func ValidationRender[T any](c *gin.Context, err error, request T, i18nBundle *i
 
 		for i := 0; i < len(tagBindingMap); i++ {
 			if i < len(tagMessageMap) {
-				mapMessage[field.Name+"_"+tagBindingMap[i]] = tagMessageMap[i]
+				tag := strings.Split(tagBindingMap[i], "=")
+				mapMessage[field.Name+"_"+tag[0]] = tagMessageMap[i]
 			}
 		}
 	}
